@@ -1,0 +1,37 @@
+name: 'blackduck-report-action'
+description: 'Create Black Duck Report and download it'
+author: "Jeroen Knoops <jeroen.knoops@philips.com>"
+branding:
+  icon: "anchor"
+  color: "gray-dark"
+inputs:
+  blackduck-url:
+    description: 'url to Black Duck instance'
+    required: true
+  blackduck-token:
+    description: 'Black Duck API token'
+    required: true
+  project:
+    description: 'Project name in Black Duck'
+    required: true
+  version:
+    description: 'Version in Black Duck'
+    required: true
+  sbom-type:
+    description: 'Type of SBOM report'
+outputs:
+  sbom-file:
+    description: 'SBOM filename if created'
+  sbom-contents:
+    description: 'SBOM content if created'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.blackduck-url }}
+    - ${{ inputs.blackduck-token }}
+    - ${{ inputs.project }}
+    - ${{ inputs.version }}
+  env:
+    SBOM_TYPE: ${{ inputs.sbom-type }}
