@@ -51,7 +51,7 @@ Create Black Duck Report and download it
 ## Example usage
 
 ```yaml
-- uses: philips-internal/blackduck-report-action@main
+- uses: philips-software/blackduck-report-action@v0.1
   id: blackduck-report
   with:
     blackduck-url: https://my-blackduck-server

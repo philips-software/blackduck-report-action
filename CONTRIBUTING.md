@@ -75,7 +75,7 @@ jobs:
           DETECT_YARN_PROD_ONLY: true
 
       - name: Create report in Black Duck
-        uses: philips-internal/blackduck-report-action@main
+        uses: philips-software/blackduck-report-action@v0.1
         id: blackduck-report
         with:
           blackduck-url: ${{ secrets.BLACKDUCK_URL }}
