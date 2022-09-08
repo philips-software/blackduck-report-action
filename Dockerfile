@@ -2,7 +2,6 @@ from bash:5.1
 
 LABEL "name"="blackduck report action"
 LABEL "maintainer"="Jeroen Knoops <jeroen.knoops@philips.com>"
-LABEL "version"="0.0.0"
 
 LABEL "com.github.actions.name"="Black Duck report Github Action"
 LABEL "com.github.actions.description"="Creates Black Duck report and downloads it"
