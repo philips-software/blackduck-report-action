@@ -76,6 +76,10 @@ Create Black Duck Report and download it
 ./get-blackduck-report.sh <blackduck-url> <blackduck-api-token> <project-name> <version-name>
 ```
 
+## Example
+
+[Here](https://github.com/philips-software/blackduck-report-action/blob/main/CONTRIBUTING.md#example-workflow) you can find an example of a complete workflow including the scanning of a project.
+
 ## Contributing
 
 You are welcome to contribute to this repository. Please look in [the contributing guide](./CONTRIBUTING.md) how to do this.
