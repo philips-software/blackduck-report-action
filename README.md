@@ -4,7 +4,7 @@ GitHub action to produce a SBOM report from a given Black Duck project.
 
 ## Problem
 
-When you get your project analyzed in Black Duck as described in [for example this blog](https://secure-software-supply-chain.philips-internal.com/posts/generate-sbom-for-python-project), you also want to be able to create a report in your ci/cd build pipeline.
+When you get your project analyzed in Black Duck, you might also want to be able to create a report in your ci/cd build pipeline.
 
 Black Duck can generate SPDX SBOM, but there is no way of trigger this with the official GitHub Action.
 
