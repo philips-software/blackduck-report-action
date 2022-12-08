@@ -194,5 +194,5 @@ report_contents=$(get_report_contents)
 echo "| got content information"
 echo
 
-echo "::set-output name=sbom-file::report.zip"
-echo "::set-output name=sbom-contents::${report_contents}"
+echo "sbom-file=report.zip" >> $GITHUB_OUTPUT
+echo "sbom-contents=${report_contents}" >> $GITHUB_OUTPUT
