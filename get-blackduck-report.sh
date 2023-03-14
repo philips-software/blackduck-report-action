@@ -81,7 +81,7 @@ function get_report_id {
     fi
     echo "| attempt $retries of $max_retries to get SDPX report"
     sleep 15
-    result=$(curl --silent --location --request GET "$version_api_url/reports" \
+    result=$(curl --silent --location --get "$version_api_url/reports" \
       --header "Authorization: Bearer $bearer_token" \
       --header 'Content-Type: application/json')
     report_api_url=$(echo "$result" | jq -r '.items[0]._meta.href')
@@ -97,14 +97,14 @@ function get_report_id {
 }
 
 function download_sbom_report {
-  curl --silent --location --request GET "$report_api_url/download.zip" \
+  curl --silent --location --get "$report_api_url/download.zip" \
     -o report.zip \
     --header "Authorization: Bearer $bearer_token" \
     --header 'Content-Type: application/zip'
 }
 
 function get_report_contents {
-  curl --silent --location --request GET "$report_api_url/contents" \
+  curl --silent --location --get "$report_api_url/contents" \
     --header "Authorization: Bearer $bearer_token" \
     --header 'Content-Type: application/json' | jq -rc .reportContent[0].fileContent
 }
