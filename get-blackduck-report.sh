@@ -29,7 +29,7 @@ function get_bearer {
 }
 
 function get_project_id {
-  result=$(curl --silent --location --request GET "${blackduck_url}/api/projects?q=name:$project" \
+  result=$(curl --silent --location --request GET --data-urlencode "q=name:$project" "${blackduck_url}/api/projects" \
     --header "Authorization: Bearer $bearer_token")
   if [ $(echo "$result" | jq -r .totalCount) -eq 0 ]
   then
@@ -41,7 +41,7 @@ function get_project_id {
 }
 
 function get_version_id {
-  result=$(curl --silent --location --request GET "$project_api_url/versions?q=versionName:$version" \
+  result=$(curl --silent --location --request GET --data-urlencode "q=versionName:$version" "$project_api_url/versions" \
     --header "Authorization: Bearer $bearer_token")
   if [ $(echo "$result" | jq -r .totalCount) -eq 0 ]
   then
