@@ -29,8 +29,8 @@ function get_bearer {
 }
 
 function get_project_id {
-  result=$(curl --silent --location --request GET --data-urlencode "q=name:$project" "${blackduck_url}/api/projects" \
-    --header "Authorization: Bearer $bearer_token")
+  result=$(curl --silent -G "${blackduck_url}/api/projects" --data-urlencode "q=name:${project}" \
+      --header "Authorization: Bearer ${bearer_token}" )
   if [ "$(echo "$result" | jq -r .totalCount)" -eq 0 ]
   then
     >&2 echo "ERROR: No project found with name: $project"
@@ -41,7 +41,7 @@ function get_project_id {
 }
 
 function get_version_id {
-  result=$(curl --silent --location --request GET --data-urlencode "q=versionName:$version" "$project_api_url/versions" \
+  result=$(curl --silent -G "${project_api_url}/versions" --data-urlencode "q=versionName:${version}" \
     --header "Authorization: Bearer $bearer_token")
   if [ "$(echo "$result" | jq -r .totalCount)" -eq 0 ]
   then
@@ -158,7 +158,7 @@ bearer_token=$(get_bearer)
 echo "| got bearer"
 echo
 
-echo "+ getting project api base url"
+echo "+ getting project api base url for project: ${project}"
 project_api_url=$(get_project_id)
 echo "| got project api base url: ${project_api_url}"
 echo
