@@ -19,7 +19,7 @@ function show_usage {
 function get_bearer {
   result=$(curl --silent --location --request POST "${blackduck_url}/api/tokens/authenticate" \
     --header "Authorization: token $blackduck_token")
-  if [ $(echo "$result" | jq -r .errorCode) != null ]
+  if [ "$(echo "$result" | jq -r .errorCode)" != null ]
   then
     >&2 echo "ERROR: No bearer token found"
     exit 1
@@ -31,7 +31,7 @@ function get_bearer {
 function get_project_id {
   result=$(curl --silent --location --request GET --data-urlencode "q=name:$project" "${blackduck_url}/api/projects" \
     --header "Authorization: Bearer $bearer_token")
-  if [ $(echo "$result" | jq -r .totalCount) -eq 0 ]
+  if [ "$(echo "$result" | jq -r .totalCount)" -eq 0 ]
   then
     >&2 echo "ERROR: No project found with name: $project"
     exit 1
@@ -43,7 +43,7 @@ function get_project_id {
 function get_version_id {
   result=$(curl --silent --location --request GET --data-urlencode "q=versionName:$version" "$project_api_url/versions" \
     --header "Authorization: Bearer $bearer_token")
-  if [ $(echo "$result" | jq -r .totalCount) -eq 0 ]
+  if [ "$(echo "$result" | jq -r .totalCount)" -eq 0 ]
   then
     >&2 echo "ERROR: No version found with name: $version"
     exit 1
@@ -53,7 +53,7 @@ function get_version_id {
 }
 
 function create_sbom_report {
-  dataraw="{\"reportFormat\": \"JSON\", \"reportType\" : \"SBOM\", \"sbomType\" : \"SPDX_22\"}"
+  dataraw="{\"reportFormat\": \"JSON\", \"reportType\" : \"SBOM\", \"sbomType\" : \"$sbom_type\"}"
   result=$(curl --silent --location --request POST "$version_api_url/sbom-reports" \
     --header "Authorization: Bearer $bearer_token" \
     --header 'Content-Type: application/json' \
@@ -61,7 +61,7 @@ function create_sbom_report {
   if [ "$result" != "" ]
   then
     >&2 echo "ERROR: error in creating sbom report"
-    >&2 echo $result
+    >&2 echo "$result"
     exit 1
   fi
 }
