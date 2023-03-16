@@ -59,7 +59,7 @@ Create Black Duck Report and download it
     project: my-project
     version: my-version
 
-- name: show content
+- name: show content - Be careful... sboms are huge.. this might cause some problems with io on GitHub.
   run: echo ${{steps.blackduck-report.outputs.sbom-contents}}
 
 - name: Upload artifact
