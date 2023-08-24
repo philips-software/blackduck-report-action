@@ -156,14 +156,14 @@ blackduck_token=$2
 project=$3
 version=$4
 
-sbom_type=${SBOM_TYPE:-"SPDX_22"}
+sbom_type=${5:-"SPDX_22"}
 
 if [ sbom_type == "CYCLONEDX_13" || sbom_type == "CYCLONEDX_14" ]
 then
   echo "INFO: sbomType "CYCLONEDX_13" or "CYCLONEDX_14" allows reportFormat values of "JSON"."
   report_format="JSON"
 else
-  report_format=${5:-"JSON"}
+  report_format=${6:-"JSON"}
 fi
 
 echo "+ getting bearer"

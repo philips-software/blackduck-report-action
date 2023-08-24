@@ -21,7 +21,7 @@ inputs:
     description: 'sbomType "SPDX_22" allows reportFormat values of "JSON", "RDF", "TAGVALUE" or "YAML". sbomType "CYCLONEDX_13" or "CYCLONEDX_14" allows reportFormat values of "JSON".'
     default: "JSON"
   sbom-type:
-    description: 'Type of SBOM report'
+    description: 'Type of SBOM report. Allowed values - SPDX_22, CYCLONEDX_13 or CYCLONEDX_14'
     default: "SPDX_22"
 outputs:
   sbom-file:
@@ -37,6 +37,5 @@ runs:
     - ${{ inputs.blackduck-token }}
     - ${{ inputs.project }}
     - ${{ inputs.version }}
+    - ${{ inputs.sbom-type }}
     - ${{ inputs.report-format }}
-  env:
-    SBOM_TYPE: ${{ inputs.sbom-type }}
