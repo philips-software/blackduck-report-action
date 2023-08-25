@@ -31,7 +31,8 @@ Create Black Duck Report and download it
 | blackduck-token | Black Duck API token | `true` |  |
 | project | Project name in Black Duck | `true` |  |
 | version | Version in Black Duck | `true` |  |
-| sbom-type | Type of SBOM report | `false` |  |
+| report-format | sbomType "SPDX_22" allows reportFormat values of "JSON", "RDF", "TAGVALUE" or "YAML". sbomType "CYCLONEDX_13" or "CYCLONEDX_14" allows reportFormat values of "JSON". | `false` | JSON |
+| sbom-type | Type of SBOM report. Allowed values - SPDX_22, CYCLONEDX_13 or CYCLONEDX_14 | `false` | SPDX_22 |
 
 
 
