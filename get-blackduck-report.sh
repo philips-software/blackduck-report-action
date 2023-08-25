@@ -53,7 +53,7 @@ function get_version_id {
 }
 
 function create_sbom_report {
-  dataraw="{\"reportFormat\": \"JSON\", \"reportType\" : \"SBOM\", \"sbomType\" : \"$sbom_type\"}"
+  dataraw="{\"reportFormat\": \"$report_format\", \"reportType\" : \"SBOM\", \"sbomType\" : \"$sbom_type\"}"
   result=$(curl --silent --location --request POST "$version_api_url/sbom-reports" \
     --header "Authorization: Bearer $bearer_token" \
     --header 'Content-Type: application/json' \
@@ -140,6 +140,11 @@ if [ -z "$4" ]
     error=true
 fi
 
+if [ -z "$5" ]
+  then
+    echo "INFO: No report-format supplied. Defaulting to JSON report-format"
+fi
+
 if [ $error == "true" ]
   then
     show_usage
@@ -151,7 +156,15 @@ blackduck_token=$2
 project=$3
 version=$4
 
-sbom_type="SPDX_22"
+sbom_type=${5:-"SPDX_22"}
+
+if [ sbom_type == "CYCLONEDX_13" || sbom_type == "CYCLONEDX_14" ]
+then
+  echo "INFO: sbomType "CYCLONEDX_13" or "CYCLONEDX_14" allows reportFormat values of "JSON"."
+  report_format="JSON"
+else
+  report_format=${6:-"JSON"}
+fi
 
 echo "+ getting bearer"
 bearer_token=$(get_bearer)
