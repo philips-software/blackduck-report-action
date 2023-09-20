@@ -158,9 +158,9 @@ version=$4
 
 sbom_type=${5:-"SPDX_22"}
 
-if [ sbom_type == "CYCLONEDX_13" || sbom_type == "CYCLONEDX_14" ]
+if [ "$sbom_type" == "CYCLONEDX_13" ] || [ "$sbom_type" == "CYCLONEDX_14" ]
 then
-  echo "INFO: sbomType "CYCLONEDX_13" or "CYCLONEDX_14" allows reportFormat values of "JSON"."
+  echo "INFO: sbomType \"CYCLONEDX_13\" or \"CYCLONEDX_14\" allows reportFormat values of \"JSON\"."
   report_format="JSON"
 else
   report_format=${6:-"JSON"}
@@ -207,5 +207,5 @@ report_contents=$(get_report_contents)
 echo "| got content information"
 echo
 
-echo "sbom-file=report.zip" >> $GITHUB_OUTPUT
-echo "sbom-contents=${report_contents}" >> $GITHUB_OUTPUT
+echo "sbom-file=report.zip" >> "$GITHUB_OUTPUT"
+echo "sbom-contents=${report_contents}" >> "$GITHUB_OUTPUT"
