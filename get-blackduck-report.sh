@@ -13,7 +13,7 @@ function show_banner {
 
 function show_usage {
     echo
-    echo "Usage: ./get-blackduck-report.sh <blackduck-url> <blackduck-api-token> <project-name> <version-name>"
+    echo "Usage: ./get-blackduck-report.sh [blackduck-url] [blackduck-api-token] [project-name] [version-name] <report-type> <report-format>
 }
 
 function get_bearer {
@@ -61,6 +61,33 @@ function create_sbom_report {
   if [ "$result" != "" ]
   then
     >&2 echo "ERROR: error in creating sbom report"
+    >&2 echo "$result"
+    exit 1
+  fi
+}
+
+function get_license_report_endpoint {
+  result=$(curl --silent -G "${project_api_url}/versions" --data-urlencode "q=versionName:${version}" \
+    --header "Authorization: Bearer $bearer_token")
+  if [ "$(echo "$result" | jq -r .totalCount)" -eq 0 ]
+  then
+    >&2 echo "ERROR: Cannot obtain license report endpoint for version: $version"
+    exit 1
+  else
+    echo "$result" | jq -r '.items[0]._meta.links[] | select(.rel=="licenseReports") | .href'
+  fi
+}
+
+function create_version_license_report {  
+  version_report_api=$(get_license_report_endpoint)
+  dataraw="{\"reportFormat\": \"TEXT\", \"reportType\" : \"VERSION_LICENSE\"}"
+  result=$(curl --silent --location --request POST "$version_report_api" \
+    --header "Authorization: Bearer $bearer_token" \
+    --header 'Content-Type: application/json' \
+    --data-raw "$dataraw" )
+  if [ "$result" != "" ]
+  then
+    >&2 echo "ERROR: error in creating license report"
     >&2 echo "$result"
     exit 1
   fi
@@ -162,6 +189,9 @@ if [ "$sbom_type" == "CYCLONEDX_13" ] || [ "$sbom_type" == "CYCLONEDX_14" ]
 then
   echo "INFO: sbomType \"CYCLONEDX_13\" or \"CYCLONEDX_14\" allows reportFormat values of \"JSON\"."
   report_format="JSON"
+elif [ "$sbom_type" == "VERSION_LICENSE" ]
+then
+  report_format="TEXT"
 else
   report_format=${6:-"JSON"}
 fi
@@ -185,6 +215,10 @@ echo "+ creating SBOM report"
 if [ "${NO_CREATE}" == true ]
 then
   echo "| We're not creating a new report for the because of the secret environment variable NO_CREATE"
+elif [ "$sbom_type" == "VERSION_LICENSE" ]
+then
+  create_version_license_report
+  echo "| triggered creating VERSION LICENSE report"
 else
   create_sbom_report
   echo "| triggered creating SBOM report"

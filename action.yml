@@ -18,10 +18,10 @@ inputs:
     description: 'Version in Black Duck'
     required: true
   report-format:
-    description: 'sbomType "SPDX_22" allows reportFormat values of "JSON", "RDF", "TAGVALUE" or "YAML". sbomType "CYCLONEDX_13" or "CYCLONEDX_14" allows reportFormat values of "JSON".'
+    description: 'sbomType "SPDX_22" allows reportFormat values of "JSON", "RDF", "TAGVALUE" or "YAML". sbomType "CYCLONEDX_13" or "CYCLONEDX_14" allows reportFormat values of "JSON". sbomType "VERSION_LICENSE" allows reportFormat value "TEXT".'
     default: "JSON"
   sbom-type:
-    description: 'Type of SBOM report. Allowed values - SPDX_22, CYCLONEDX_13 or CYCLONEDX_14'
+    description: 'Type of SBOM report. Allowed values - SPDX_22, CYCLONEDX_13, CYCLONEDX_14, or VERSION_LICENSE'
     default: "SPDX_22"
 outputs:
   sbom-file:
