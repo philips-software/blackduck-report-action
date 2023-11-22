@@ -1,2 +1,3 @@
 - Jeroen Knoops <jeroen.knoops@philips.com>
 - Brend Smits <brend.smits@philips.com>
+- [Bart Golsteijn](https://github.com/bartgolsteijn)
