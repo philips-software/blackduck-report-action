@@ -19,34 +19,26 @@ It will also wait for Black Duck to complete the report and download it.
 ## Description
 
 Create Black Duck Report and download it
-
-
 <!-- action-docs-description -->
 <!-- action-docs-inputs -->
 ## Inputs
 
 | parameter | description | required | default |
-| - | - | - | - |
+| --- | --- | --- | --- |
 | blackduck-url | url to Black Duck instance | `true` |  |
 | blackduck-token | Black Duck API token | `true` |  |
 | project | Project name in Black Duck | `true` |  |
 | version | Version in Black Duck | `true` |  |
-| report-format | sbomType "SPDX_22" allows reportFormat values of "JSON", "RDF", "TAGVALUE" or "YAML". sbomType "CYCLONEDX_13" or "CYCLONEDX_14" allows reportFormat values of "JSON". | `false` | JSON |
-| sbom-type | Type of SBOM report. Allowed values - SPDX_22, CYCLONEDX_13 or CYCLONEDX_14 | `false` | SPDX_22 |
-
-
-
+| report-format | sbomType "SPDX_22" allows reportFormat values of "JSON", "RDF", "TAGVALUE" or "YAML". sbomType "CYCLONEDX_13" or "CYCLONEDX_14" allows reportFormat values of "JSON". sbomType "VERSION_LICENSE" allows reportFormat value "TEXT". | `false` | JSON |
+| sbom-type | Type of SBOM report. Allowed values - SPDX_22, CYCLONEDX_13, CYCLONEDX_14, or VERSION_LICENSE | `false` | SPDX_22 |
 <!-- action-docs-inputs -->
 <!-- action-docs-outputs -->
 ## Outputs
 
 | parameter | description |
-| - | - |
+| --- | --- |
 | sbom-file | SBOM filename if created |
 | sbom-contents | SBOM content if created |
-
-
-
 <!-- action-docs-outputs -->
 
 ## Example usage
