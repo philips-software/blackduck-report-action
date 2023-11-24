@@ -13,7 +13,7 @@ function show_banner {
 
 function show_usage {
     echo
-    echo "Usage: ./get-blackduck-report.sh [blackduck-url] [blackduck-api-token] [project-name] [version-name] <report-type> <report-format>
+    echo "Usage: ./get-blackduck-report.sh [blackduck-url] [blackduck-api-token] [project-name] [version-name] <report-type> <report-format>"
 }
 
 function get_bearer {
