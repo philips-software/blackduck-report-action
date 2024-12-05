@@ -52,6 +52,38 @@ function get_version_id {
   fi
 }
 
+function get_scan_status {
+  scan_status="IN_PROGRESS"
+  max_retries=50
+  retries=0
+  while [ "$scan_status" = "IN_PROGRESS" ]
+  do
+    ((retries++))
+    if [ "$retries" -gt "$max_retries" ];
+    then
+      >&2 echo "ERROR: max retries reached"
+      exit 1
+    fi
+    echo "| attempt $retries of $max_retries to get scan status"
+    sleep 15
+    result=$(curl --silent --location --get "$version_api_url/codelocations" \
+      --header "Authorization: Bearer $bearer_token" \
+      --header 'Content-Type: application/json')
+    scan_status=$(echo "$result" | jq -r '.items[] | select(.status[] | .operationNameCode == "ServerScanning" and .status != "COMPLETED")')
+    if [ -z "$scan_status" ];
+    then
+      scan_status="COMPLETED"
+    fi
+    echo "| - scan_status: $scan_status"
+  done
+
+  if [ "$scan_status" != "COMPLETED" ];
+  then
+    >&2 echo " ERROR: scan_status is not COMPLETED, it is $scan_status."
+    exit 1
+  fi
+}
+
 function create_sbom_report {
   dataraw="{\"reportFormat\": \"$report_format\", \"reportType\" : \"SBOM\", \"sbomType\" : \"$sbom_type\"}"
   result=$(curl --silent --location --request POST "$version_api_url/sbom-reports" \
@@ -78,7 +110,7 @@ function get_license_report_endpoint {
   fi
 }
 
-function create_version_license_report {  
+function create_version_license_report {
   version_report_api=$(get_license_report_endpoint)
   dataraw="{\"reportFormat\": \"TEXT\", \"reportType\" : \"VERSION_LICENSE\"}"
   result=$(curl --silent --location --request POST "$version_report_api" \
@@ -210,6 +242,10 @@ echo "+ getting version api base url"
 version_api_url=$(get_version_id)
 echo "| got version api base url: ${version_api_url}"
 echo
+
+echo "+ getting scan status"
+get_scan_status
+echo "+ got scan status"
 
 echo "+ creating SBOM report"
 if [ "${NO_CREATE}" == true ]
