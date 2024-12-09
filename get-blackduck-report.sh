@@ -73,6 +73,8 @@ function get_scan_status {
     if [ -z "$scan_status" ];
     then
       scan_status="COMPLETED"
+    else
+      scan_status="IN_PROGRESS"
     fi
     echo "| - scan_status: $scan_status"
   done
