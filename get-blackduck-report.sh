@@ -170,6 +170,17 @@ function get_report_contents {
     --header 'Content-Type: application/json' | jq -rc .reportContent[0].fileContent
 }
 
+function install_blackduck_ca_cert {
+  echo "Custom Black Duck root cert provided. Installing..."
+
+  CERT_PATH="/usr/local/share/ca-certificates/blackduck.pem"
+  echo "$blackduck_ca_cert" > "$CERT_PATH"
+
+  update-ca-certificates
+
+  echo "Custom CA installed."
+}
+
 
 #### Main program
 
@@ -203,7 +214,17 @@ fi
 
 if [ -z "$5" ]
   then
+    echo "INFO: No sbom-type supplied. Defaulting to JSON SPDX_22"
+fi
+
+if [ -z "$6" ]
+  then
     echo "INFO: No report-format supplied. Defaulting to JSON report-format"
+fi
+
+if [ -z "$7" ]
+  then
+    echo "INFO: No custom blackduck CA cert supplied. Defaulting to system CA certs"
 fi
 
 if [ $error == "true" ]
@@ -218,6 +239,11 @@ project=$3
 version=$4
 
 sbom_type=${5:-"SPDX_22"}
+blackduck_ca_cert=$7
+
+if [ -n "$blackduck_ca_cert" ]; then
+  install_blackduck_ca_cert
+fi
 
 if [ "$sbom_type" == "CYCLONEDX_13" ] || [ "$sbom_type" == "CYCLONEDX_14" ]
 then

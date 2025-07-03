@@ -8,9 +8,10 @@ LABEL "com.github.actions.description"="Creates Black Duck report and downloads 
 LABEL "com.github.actions.icon"="terminal"
 LABEL "com.github.actions.color"="gray-dark"
 
-RUN apk update && apk add \
-      jq \
-      curl
+RUN apk update && apk add --no-cache \
+      ca-certificates \
+      curl \
+      jq
 
 ENV WORK_DIR=/work
 RUN mkdir -p ${WORK_DIR}
