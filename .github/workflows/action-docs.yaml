@@ -10,13 +10,13 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # ratchet:actions/checkout@v4
 
-      - uses: npalm/action-docs-action@v1.4.0
+      - uses: npalm/action-docs-action@b62a69e27ae389aa92b450f647d37409b9277bf0 # ratchet:npalm/action-docs-action@v1.4.0
 
       - name: Update readme in the repository
         if: github.event_name != 'pull_request'
-        uses: stefanzweifel/git-auto-commit-action@v5.0.0
+        uses: stefanzweifel/git-auto-commit-action@8756aa072ef5b4a080af5dc8fef36c5d586e521d # ratchet:stefanzweifel/git-auto-commit-action@v5.0.0
         with:
           commit_message: "chore(ci): Updating readme"
           file_pattern: README.md
