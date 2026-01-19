@@ -68,7 +68,7 @@ function get_scan_status {
     sleep 15
     result=$(curl --silent --location --get "$version_api_url/codelocations" \
       --header "Authorization: Bearer $bearer_token" \
-      --header 'Content-Type: application/json')
+      --header 'Content-Type: application/vnd.blackducksoftware.scan-4+json')
     scan_status=$(echo "$result" | jq -r '.items[] | select(.status[] | .operationNameCode == "ServerScanning" and .status != "COMPLETED")')
     if [ -z "$scan_status" ];
     then
@@ -90,7 +90,7 @@ function create_sbom_report {
   dataraw="{\"reportFormat\": \"$report_format\", \"reportType\" : \"SBOM\", \"sbomType\" : \"$sbom_type\"}"
   result=$(curl --silent --location --request POST "$version_api_url/sbom-reports" \
     --header "Authorization: Bearer $bearer_token" \
-    --header 'Content-Type: application/json' \
+    --header 'Content-Type: application/vnd.blackducksoftware.report-4+json' \
     --data-raw "$dataraw" )
   if [ "$result" != "" ]
   then
@@ -117,7 +117,7 @@ function create_version_license_report {
   dataraw="{\"reportFormat\": \"TEXT\", \"reportType\" : \"VERSION_LICENSE\"}"
   result=$(curl --silent --location --request POST "$version_report_api" \
     --header "Authorization: Bearer $bearer_token" \
-    --header 'Content-Type: application/json' \
+    --header 'Content-Type: application/vnd.blackducksoftware.report-4+json' \
     --data-raw "$dataraw" )
   if [ "$result" != "" ]
   then
@@ -144,7 +144,7 @@ function get_report_id {
     sleep 15
     result=$(curl --silent --location --get "$version_api_url/reports" \
       --header "Authorization: Bearer $bearer_token" \
-      --header 'Content-Type: application/json')
+      --header 'Content-Type: application/vnd.blackducksoftware.report-4+json')
     report_api_url=$(echo "$result" | jq -r '.items[0]._meta.href')
     report_status=$(echo "$result" | jq -r '.items[0].status')
     echo "| - report_status: $report_status"
@@ -167,7 +167,18 @@ function download_sbom_report {
 function get_report_contents {
   curl --silent --location --get "$report_api_url/contents" \
     --header "Authorization: Bearer $bearer_token" \
-    --header 'Content-Type: application/json' | jq -rc .reportContent[0].fileContent
+    --header 'Content-Type: application/vnd.blackducksoftware.report-4+json' | jq -rc .reportContent[0].fileContent
+}
+
+function install_blackduck_ca_cert {
+  echo "Custom Black Duck root cert provided. Installing..."
+
+  CERT_PATH="/usr/local/share/ca-certificates/blackduck.pem"
+  echo "$blackduck_ca_cert" > "$CERT_PATH"
+
+  update-ca-certificates
+
+  echo "Custom CA installed."
 }
 
 
@@ -203,7 +214,17 @@ fi
 
 if [ -z "$5" ]
   then
+    echo "INFO: No sbom-type supplied. Defaulting to JSON SPDX_22"
+fi
+
+if [ -z "$6" ]
+  then
     echo "INFO: No report-format supplied. Defaulting to JSON report-format"
+fi
+
+if [ -z "$7" ]
+  then
+    echo "INFO: No custom blackduck CA cert supplied. Defaulting to system CA certs"
 fi
 
 if [ $error == "true" ]
@@ -218,6 +239,11 @@ project=$3
 version=$4
 
 sbom_type=${5:-"SPDX_22"}
+blackduck_ca_cert=$7
+
+if [ -n "$blackduck_ca_cert" ]; then
+  install_blackduck_ca_cert
+fi
 
 if [ "$sbom_type" == "CYCLONEDX_13" ] || [ "$sbom_type" == "CYCLONEDX_14" ]
 then
