@@ -1,4 +1,4 @@
-FROM bash:5.2
+FROM bash:5.3
 
 LABEL "name"="blackduck report action"
 LABEL "maintainer"="Jeroen Knoops <jeroen.knoops@philips.com>"
