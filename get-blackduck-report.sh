@@ -274,9 +274,9 @@ if [ -n "$blackduck_ca_cert" ]; then
   install_blackduck_ca_cert
 fi
 
-if [ "$sbom_type" == "CYCLONEDX_13" ] || [ "$sbom_type" == "CYCLONEDX_14" ]
+if [ "$sbom_type" == "CYCLONEDX_13" ] || [ "$sbom_type" == "CYCLONEDX_14" ] || [ "$sbom_type" == "CYCLONEDX_15" ] || [ "$sbom_type" == "CYCLONEDX_16" ]
 then
-  echo "INFO: sbomType \"CYCLONEDX_13\" or \"CYCLONEDX_14\" allows reportFormat values of \"JSON\"."
+  echo "INFO: sbomType \"CYCLONEDX_13\", \"CYCLONEDX_14\", \"CYCLONEDX_15\", or \"CYCLONEDX_16\" allows reportFormat values of \"JSON\"."
   report_format="JSON"
 elif [ "$sbom_type" == "VERSION_LICENSE" ]
 then
