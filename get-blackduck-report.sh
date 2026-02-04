@@ -87,7 +87,36 @@ function get_scan_status {
 }
 
 function create_sbom_report {
-  dataraw="{\"reportFormat\": \"$report_format\", \"reportType\" : \"SBOM\", \"sbomType\" : \"$sbom_type\"}"
+  # Map old sbom-type values to new specification format
+  case "$sbom_type" in
+    SPDX_22)
+      specification="SPDX-2.2"
+      ;;
+    SPDX_23)
+      specification="SPDX-2.3"
+      ;;
+    SPDX_30)
+      specification="SPDX-3.0"
+      ;;
+    CYCLONEDX_13)
+      specification="CycloneDX-1.3"
+      ;;
+    CYCLONEDX_14)
+      specification="CycloneDX-1.4"
+      ;;
+    CYCLONEDX_15)
+      specification="CycloneDX-1.5"
+      ;;
+    CYCLONEDX_16)
+      specification="CycloneDX-1.6"
+      ;;
+    *)
+      >&2 echo "ERROR: Unknown sbom-type: $sbom_type"
+      exit 1
+      ;;
+  esac
+  
+  dataraw="{\"reportFormat\": \"$report_format\", \"reportType\" : \"SBOM\", \"sbomType\" : \"$sbom_type\", \"specification\" : \"$specification\"}"
   result=$(curl --silent --location --request POST "$version_api_url/sbom-reports" \
     --header "Authorization: Bearer $bearer_token" \
     --header 'Content-Type: application/vnd.blackducksoftware.report-4+json' \
